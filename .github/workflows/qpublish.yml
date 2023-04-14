@@ -11,8 +11,8 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         
-      - name: Install Jupyter        
-        run: python3 -m pip install jupyter
+      - name: Install python packages
+        run: python3 -m pip install -r requirements.txt
       
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
