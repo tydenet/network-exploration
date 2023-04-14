@@ -8,7 +8,7 @@ jupyter: python3
 
 For a demonstration of a line plot on a polar axis, see @fig-polar.
 
-Updated again and again.
+Updated again and again and again.
 
 ```{python}
 #| label: fig-polar
