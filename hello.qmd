@@ -6,9 +6,7 @@ format:
 jupyter: python3
 ---
 
-For a demonstration of a line plot on a polar axis, see @fig-polar.
-
-Updated again and again and again.
+This document includes a spatial view of a network, with some interactivity (hover for labels on nodes). 
 
 ```{python}
 import plotly.graph_objects as go
