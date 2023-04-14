@@ -1,4 +1,6 @@
+ipysigma
 jupyter
+networkx
 numpy
 matplotlib
 pandas

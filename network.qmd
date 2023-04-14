@@ -7,7 +7,7 @@ format:
 jupyter: python3
 ---
 
-This document includes a spatial view of a network, with some interactivity (hover for labels on nodes). 
+This document includes a couple of visualisations of the herbarium network - one using plotly (to display a map background), one with sigma.
 
 ```{python}
 import plotly.graph_objects as go
@@ -70,4 +70,12 @@ fig.update_layout(
 )
 
 fig.show()
+```
+
+
+```{python}
+import networkx as nx
+from ipysigma import Sigma
+g = nx.read_gexf('data/ipnitypes.gexf')
+Sigma(g, node_size=g.degree)
 ```
