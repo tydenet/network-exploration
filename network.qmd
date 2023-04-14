@@ -1,0 +1,73 @@
+---
+title: "Network visualisation"
+format:
+  html:
+    code-fold: true
+    page-layout: custom
+jupyter: python3
+---
+
+This document includes a spatial view of a network, with some interactivity (hover for labels on nodes). 
+
+```{python}
+import plotly.graph_objects as go
+import pandas as pd
+
+df_nodes = pd.read_csv('data/ipnitypes_nodes.csv',sep='\t')
+
+df_edges = pd.read_csv('data/ipnitypes_edges.csv',sep='\t')
+df_edges = pd.merge(left=df_edges,right=df_nodes.set_index('node_id')[['latitude','longitude']],left_on='from',right_index=True,how='left')
+df_edges.rename(columns={'latitude':'latitude_from','longitude':'longitude_from'},inplace=True)
+df_edges = pd.merge(left=df_edges,right=df_nodes.set_index('node_id')[['latitude','longitude']],left_on='to',right_index=True,how='left')
+df_edges.rename(columns={'latitude':'latitude_to','longitude':'longitude_to'},inplace=True)
+
+fig = go.Figure()
+
+fig.add_trace(go.Scattergeo(
+    # locationmode = 'USA-states',
+    lon = df_nodes['longitude'],
+    lat = df_nodes['latitude'],
+    hoverinfo = 'text',
+    text = df_nodes['type_holder_code'],
+    mode = 'markers',
+    marker = dict(
+        size = 4,
+        color = 'rgb(255, 0, 0)',
+        line = dict(
+            width = 3,
+            color = 'rgba(68, 68, 68, 0)'
+        )
+    )))
+
+flight_paths = []
+for i in range(len(df_edges)):
+    fig.add_trace(
+        go.Scattergeo(
+            locationmode = 'USA-states',
+            lon = [df_edges['longitude_from'][i], df_edges['longitude_to'][i]],
+            lat = [df_edges['latitude_from'][i], df_edges['latitude_to'][i]],
+            mode = 'lines',
+            hoverinfo='none',
+            line = dict(width = float(df_edges['weight'][i]) / float(df_edges['weight'].max())*10,color = 'red'),
+            opacity = 0.5,
+        )
+    )
+
+fig.update_layout(
+    title_text = 'Herbarium duplicate network (hover for holder codes)',
+    showlegend = False,
+    width=1500,
+    height=1200,
+    geo = dict(
+        # scope = 'worldwide',
+        # projection_type = 'azimuthal equal area',
+        showland = True,
+        showcountries=True,
+        # showborders = True,
+        landcolor = 'rgb(243, 243, 243)',
+        countrycolor = 'rgb(204, 204, 204)',
+    ),
+)
+
+fig.show()
+```
